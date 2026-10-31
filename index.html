@@ -1,0 +1,791 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<title>Wiom · रिचार्ज फ्लो · तोहफ़े से Wiom TV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-default:#FFFFFF; --bg-surface:#FAF9FC; --bg-subtle:#F1EDF7;
+  --bg-brand:#D9008D; --bg-brand-subtle:#FFE5F6; --bg-selected:#FFCCED;
+  --bg-info-subtle:#F1E5FF; --bg-positive-subtle:#E1FAED; --bg-critical-subtle:#FFE9EA;
+  --bg-warning-subtle:#FFF6D6;
+  --text-default:#161021; --text-subtle:#665E75; --text-disabled:#A7A1B2;
+  --text-brand:#D9008D; --text-positive:#008043; --text-critical:#D92130; --info:#6D17CE;
+  --stroke-subtle:#D7D3E0; --stroke-default:#E8E4F0;
+  --r-tiny:4px; --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:24px; --r-full:9999px;
+  --sh-sm:0 1px 3px 0 rgba(0,0,0,.15); --sh-md:0 2px 6px 0 rgba(0,0,0,.15);
+  --sh-lg:0 4px 12px 0 rgba(0,0,0,.15);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:"Noto Sans Devanagari","Noto Sans",system-ui,sans-serif;background:#EDE9F4;color:var(--text-default);padding:34px 28px 70px}
+
+/* ---------------- page ---------------- */
+.page{max-width:1180px;margin:0 auto}
+.page h1{font-size:26px;font-weight:700;letter-spacing:-.015em}
+.page .sub{font-size:14px;line-height:21px;color:var(--text-subtle);margin-top:6px;max-width:820px}
+.page .note{margin-top:14px;padding:11px 14px;border-radius:var(--r-md);background:var(--bg-info-subtle);font-size:13px;line-height:19px;max-width:820px}
+.page .note b{color:var(--info)}
+
+.stage{display:flex;gap:34px;align-items:flex-start;margin-top:26px}
+
+.rail{flex:0 0 272px;background:#fff;border-radius:var(--r-xl);padding:14px;box-shadow:var(--sh-md)}
+.rail .rt{font-size:12px;font-weight:600;line-height:17px;color:var(--text-subtle);padding:4px 8px 10px}
+.rail button{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;
+  font-family:inherit;font-size:13px;line-height:18px;color:var(--text-default);
+  padding:9px 10px;border-radius:var(--r-md);cursor:pointer;
+}
+.rail button:hover{background:var(--bg-surface)}
+.rail button.on{background:var(--bg-brand-subtle);font-weight:600}
+.rail button .n{
+  flex:0 0 auto;width:22px;height:22px;border-radius:var(--r-full);display:grid;place-items:center;
+  background:var(--bg-subtle);color:var(--text-subtle);font-size:11px;font-weight:700;
+}
+.rail button.on .n{background:var(--bg-brand);color:#fff}
+.rail button.done .n{background:var(--bg-positive-subtle);color:var(--text-positive)}
+
+.phonewrap{flex:0 0 auto}
+.caption{width:360px;margin:0 auto 12px;font-size:13px;line-height:19px;color:var(--text-subtle);text-align:center;min-height:38px}
+.caption b{display:block;color:var(--text-default);font-size:15px;font-weight:700;line-height:21px;margin-bottom:2px}
+
+.ctrl{display:flex;align-items:center;gap:8px;justify-content:center;flex-wrap:wrap;width:360px;margin:16px auto 0}
+.ctrl button{
+  font-family:inherit;font-size:13px;font-weight:600;line-height:18px;padding:7px 14px;
+  border-radius:var(--r-full);border:1px solid var(--stroke-subtle);background:#fff;color:var(--text-default);cursor:pointer;
+}
+.ctrl button.pri{background:var(--bg-brand);border-color:var(--bg-brand);color:#fff}
+.ctrl button:disabled{opacity:.4;cursor:default}
+
+.sidenote{flex:1 1 0;min-width:240px;background:#fff;border-radius:var(--r-xl);padding:18px 20px;box-shadow:var(--sh-md)}
+.sidenote h3{font-size:15px;font-weight:700;line-height:21px}
+.sidenote p{font-size:13px;line-height:20px;color:var(--text-subtle);margin-top:8px}
+.sidenote ul{margin:10px 0 0 16px}
+.sidenote li{font-size:13px;line-height:20px;color:var(--text-subtle);margin-bottom:6px}
+.sidenote b{color:var(--text-default)}
+
+/* ---------------- phone ---------------- */
+.phone{
+  width:360px;height:800px;position:relative;overflow:hidden;
+  border-radius:28px;border:1px solid var(--stroke-subtle);box-shadow:var(--sh-lg);background:#fff;
+}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;background:var(--bg-surface)}
+.scr.on{display:flex}
+
+.sbar{flex:0 0 auto;height:34px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:11px;font-weight:600;color:var(--text-default);position:relative;z-index:5}
+.sbar .rr{display:flex;align-items:center;gap:5px}
+.sbar svg{width:13px;height:13px;color:var(--text-default)}
+
+.tbar{flex:0 0 auto;height:48px;display:flex;align-items:center;gap:6px;padding:0 8px;position:relative;z-index:4;background:transparent}
+.tbar .ib{width:40px;height:40px;border:0;background:transparent;border-radius:var(--r-full);display:grid;place-items:center;cursor:pointer}
+.tbar .ib svg{width:22px;height:22px;color:#352D42}
+.tbar .ttl{flex:1;font-size:18px;font-weight:700;line-height:25px;padding-left:4px}
+.tbar .sp{flex:1}
+.tbar .sq{width:26px;height:26px;border-radius:var(--r-sm);background:#352D42;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:700}
+
+.h1{font-size:20px;font-weight:700;line-height:28px;padding:4px 16px 14px}
+.scroll{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;min-height:0;padding:0 16px}
+.scroll::-webkit-scrollbar{width:0}
+.footbar{flex:0 0 auto;padding:12px 16px 20px;background:var(--bg-surface)}
+.btn{width:100%;height:52px;border:0;border-radius:var(--r-lg);background:var(--bg-brand);color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer}
+.btn:disabled{background:var(--stroke-subtle);color:var(--text-disabled);cursor:default}
+
+/* ---------------- chat ---------------- */
+.scr.chat{background:var(--bg-subtle)}
+.chead{flex:0 0 auto;height:52px;display:flex;align-items:center;gap:10px;padding:0 12px;background:#fff}
+.chead .logo{width:30px;height:30px;border-radius:var(--r-sm);background:var(--bg-brand);display:grid;place-items:center}
+.chead .logo svg{width:20px;height:20px;color:#fff}
+.chead .nm{flex:1}
+.chead .nm b{display:block;font-size:15px;font-weight:700;line-height:20px}
+.chead .nm span{font-size:11px;line-height:15px;color:var(--text-subtle)}
+.chead .ib{width:36px;height:36px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer}
+.chead .ib svg{width:20px;height:20px;color:#352D42}
+
+.statcard{margin:10px 12px 0;background:#fff;border-radius:var(--r-md);box-shadow:var(--sh-sm);padding:9px 12px;display:flex;align-items:center;gap:10px}
+.statcard .ic{width:28px;height:28px;border-radius:var(--r-sm);background:var(--bg-subtle);display:grid;place-items:center}
+.statcard .ic svg{width:16px;height:16px;color:#352D42}
+.statcard .tx{font-size:11px;line-height:16px;color:var(--text-subtle)}
+.statcard .tx b{font-size:12px;color:var(--text-default)}
+.statcard .tx .on{color:var(--text-positive);font-weight:700}
+.statcard .tx .off{color:var(--text-critical);font-weight:700}
+
+.msgs{flex:1 1 auto;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;min-height:0;padding:12px;display:flex;flex-direction:column;gap:10px}
+.msgs::-webkit-scrollbar{width:0}
+.bub{max-width:86%;align-self:flex-start;background:#fff;border-radius:4px 14px 14px 14px;padding:10px 12px 6px;box-shadow:var(--sh-sm)}
+.bub p{font-size:13px;line-height:19px}
+.bub p b{font-weight:700}
+.bub .ts{font-size:10px;line-height:15px;color:var(--text-disabled);text-align:right;margin-top:3px}
+.bub .act{display:block;width:100%;margin-top:4px;padding-top:9px;border-top:1px solid var(--stroke-default);
+  background:transparent;border:0;font-family:inherit;font-size:14px;font-weight:700;line-height:20px;color:var(--text-brand);cursor:pointer}
+.bub .giftbox{background:var(--bg-positive-subtle);border-radius:var(--r-md);padding:14px;display:grid;place-items:center;margin-bottom:8px}
+
+.cinput{flex:0 0 auto;padding:8px 12px 14px;display:flex;align-items:center;gap:8px;background:var(--bg-subtle)}
+.cinput .f{flex:1;height:44px;border-radius:var(--r-full);background:#fff;border:1px solid var(--stroke-subtle);display:flex;align-items:center;padding:0 16px;font-size:13px;color:var(--text-disabled)}
+.cinput .snd{width:44px;height:44px;border-radius:var(--r-full);background:var(--stroke-subtle);display:grid;place-items:center}
+.cinput .snd svg{width:19px;height:19px;color:#fff}
+
+/* ---------------- plan list ---------------- */
+.planrow{
+  display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--stroke-default);
+  border-radius:var(--r-lg);padding:14px;margin-bottom:10px;cursor:pointer;
+}
+.planrow.sel{border-color:var(--bg-brand);border-width:2px;padding:13px;background:#fff}
+.planrow .rd{flex:0 0 auto;width:20px;height:20px;border-radius:var(--r-full);border:2px solid var(--stroke-subtle);display:grid;place-items:center}
+.planrow.sel .rd{border-color:var(--bg-brand)}
+.planrow.sel .rd:after{content:"";width:10px;height:10px;border-radius:var(--r-full);background:var(--bg-brand)}
+.planrow .tx{flex:1;min-width:0}
+.planrow .tx .d{display:block;font-size:14px;font-weight:700;line-height:20px}
+.planrow .tx .d span{font-weight:400;font-size:12px;color:var(--text-subtle)}
+.planrow .tx .tag{display:inline-block;margin-top:4px;font-size:10px;font-weight:700;line-height:14px;color:var(--text-positive);background:var(--bg-positive-subtle);border-radius:var(--r-tiny);padding:1px 6px}
+.planrow .pr{flex:0 0 auto;text-align:right}
+.planrow .pr .cut{display:block;font-size:11px;line-height:15px;color:var(--text-disabled);text-decoration:line-through}
+.planrow .pr .amt{display:block;font-size:15px;font-weight:700;line-height:21px}
+
+/* ---------------- bill ---------------- */
+.acct{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--stroke-default);border-radius:var(--r-lg);padding:14px}
+.acct .ic{width:40px;height:40px;border-radius:var(--r-full);background:var(--bg-brand-subtle);display:grid;place-items:center}
+.acct .ic svg{width:20px;height:20px;color:var(--bg-brand)}
+.acct .tx b{display:block;font-size:15px;font-weight:700;line-height:21px}
+.acct .tx span{font-size:12px;line-height:17px;color:var(--text-subtle)}
+
+.billrow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-top:18px}
+.billrow .l{font-size:14px;line-height:20px}
+.billrow .r{font-size:14px;font-weight:600;line-height:20px}
+.billdates{font-size:12px;line-height:17px;color:var(--text-brand);padding-top:4px}
+.hr{height:1px;background:var(--stroke-default);margin:18px 0 0}
+.total{display:flex;align-items:baseline;justify-content:space-between;padding-top:16px}
+.total .l{font-size:20px;font-weight:700;line-height:28px}
+.total .r{font-size:22px;font-weight:700;line-height:30px}
+.coupon{display:flex;align-items:center;gap:10px;margin-top:22px;padding:13px 14px;border:1px dashed var(--stroke-subtle);border-radius:var(--r-md);background:#fff;cursor:pointer}
+.coupon .ic{width:22px;height:22px;border-radius:var(--r-full);background:var(--text-positive);display:grid;place-items:center}
+.coupon .ic svg{width:13px;height:13px;color:#fff}
+.coupon .tx{flex:1;font-size:14px;font-weight:600;line-height:20px}
+.coupon .ch{width:16px;height:16px;color:var(--text-brand)}
+
+/* ---------------- pay method ---------------- */
+.paycard{display:flex;gap:12px;background:var(--bg-brand-subtle);border-radius:var(--r-lg);padding:16px;cursor:pointer;margin-bottom:12px}
+.paycard.quiet{background:#fff;border:1px solid var(--stroke-default)}
+.paycard .ic{flex:0 0 auto;width:38px;height:38px;border-radius:var(--r-full);background:#fff;display:grid;place-items:center}
+.paycard .ic svg{width:20px;height:20px;color:var(--bg-brand)}
+.paycard .tx{flex:1}
+.paycard .tx .t{display:block;font-size:15px;font-weight:700;line-height:21px;color:var(--text-brand)}
+.paycard.quiet .tx .t{color:var(--text-default)}
+.paycard .tx .s{display:block;font-size:12px;line-height:17px;color:var(--text-subtle);margin-top:3px}
+.paycard .tx .save{display:inline-block;margin-top:7px;font-size:11px;font-weight:700;line-height:15px;color:var(--text-positive);background:var(--bg-positive-subtle);border-radius:var(--r-tiny);padding:2px 7px}
+.paylogos{display:flex;gap:6px;margin-top:9px}
+.paylogos span{height:17px;padding:0 6px;border-radius:3px;background:#fff;border:1px solid var(--stroke-default);font-size:8px;font-weight:700;line-height:15px;color:#352D42;display:inline-flex;align-items:center}
+.nolink{text-align:center;font-size:13px;font-weight:600;line-height:19px;color:var(--text-default);padding-top:14px;cursor:pointer}
+.nolink svg{width:14px;height:14px;color:var(--text-brand);vertical-align:-2px}
+
+/* ---------------- upi app ---------------- */
+.scr.upi{background:#F3F4F6}
+.upitop{flex:0 0 auto;padding:16px;display:flex;align-items:center;justify-content:space-between;background:#fff;border-bottom:1px solid #E5E7EB}
+.upitop .nm{font-size:14px;font-weight:700;color:#111827}
+.upitop .tm{font-size:12px;font-weight:600;color:#6B7280;background:#F3F4F6;border-radius:var(--r-full);padding:3px 10px}
+.upibody{flex:1 1 auto;padding:22px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.upibody .to{font-size:13px;color:#6B7280}
+.upibody .mer{font-size:17px;font-weight:700;color:#111827;margin-top:2px}
+.upibody .amt{font-size:40px;font-weight:700;color:#111827;margin-top:16px;letter-spacing:-.02em}
+.upibody .vpa{font-size:12px;color:#9CA3AF;margin-top:4px}
+.upibody .bank{display:flex;align-items:center;gap:10px;margin-top:26px;width:100%;background:#fff;border:1px solid #E5E7EB;border-radius:var(--r-md);padding:12px 14px}
+.upibody .bank .d{width:30px;height:30px;border-radius:var(--r-full);background:#111827;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700}
+.upibody .bank .t{flex:1;font-size:13px;font-weight:600;color:#111827}
+.upibody .bank .t span{display:block;font-size:11px;font-weight:400;color:#6B7280}
+.upibody .bank>svg{flex:0 0 auto;width:16px;height:16px;color:#9CA3AF}
+.upifoot{flex:0 0 auto;padding:14px 16px 22px;background:#fff;border-top:1px solid #E5E7EB}
+.upibtn{width:100%;height:52px;border:0;border-radius:var(--r-md);background:#111827;color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer}
+
+/* ---------------- checking ---------------- */
+.mid{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 24px;text-align:center}
+.spin{width:64px;height:64px;border-radius:var(--r-full);border:5px solid var(--bg-brand-subtle);border-top-color:var(--bg-brand);animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.mid h2{font-size:20px;font-weight:700;line-height:28px;margin-top:22px}
+.mid p{font-size:14px;line-height:20px;color:var(--text-subtle);margin-top:6px}
+.counter{margin-top:18px;font-size:24px;font-weight:700;line-height:32px;color:var(--text-brand);font-variant-numeric:tabular-nums}
+.mid .warn{margin-top:26px;font-size:12px;line-height:18px;color:var(--text-subtle);background:var(--bg-warning-subtle);border-radius:var(--r-md);padding:10px 14px}
+
+/* ---------------- success ---------------- */
+.tick{width:96px;height:96px;border-radius:var(--r-full);background:var(--bg-positive-subtle);display:grid;place-items:center;margin:0 auto}
+.tick .in{width:54px;height:54px;border-radius:var(--r-full);background:var(--text-positive);display:grid;place-items:center}
+.tick svg{width:28px;height:28px;color:#fff}
+.sucT{font-size:22px;font-weight:700;line-height:30px;text-align:center;margin-top:18px}
+.sucA{font-size:14px;line-height:20px;color:var(--text-subtle);text-align:center;margin-top:4px}
+.sucA b{font-size:16px;font-weight:700;color:var(--text-default)}
+.deets{background:#fff;border:1px solid var(--stroke-default);border-radius:var(--r-lg);padding:14px;margin-top:12px}
+.deets .g{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.deets .k{font-size:11px;line-height:16px;color:var(--text-subtle)}
+.deets .v{font-size:13px;font-weight:600;line-height:19px;margin-top:2px}
+.deets .full{margin-top:14px}
+.deets .full .v{font-size:12px;word-break:break-all}
+
+/* ---------------- gift ---------------- */
+.scr.gift{background:var(--bg-surface)}
+.giftT{font-size:20px;font-weight:700;line-height:28px;text-align:center;padding:14px 24px 0}
+.giftstage{flex:1 1 auto;margin:18px 16px;border-radius:var(--r-lg);background:var(--bg-positive-subtle);display:grid;place-items:center;cursor:pointer;position:relative;overflow:hidden}
+.gifthint{flex:0 0 auto;text-align:center;font-size:13px;line-height:19px;color:var(--text-subtle);padding:0 24px 26px}
+
+.gbox{width:196px;height:196px;position:relative}
+.gbox .rays{position:absolute;inset:-40px;opacity:0;transition:opacity .3s ease}
+.gbox .rays span{position:absolute;left:50%;top:50%;width:4px;height:52px;margin-left:-2px;margin-top:-26px;border-radius:2px;background:linear-gradient(180deg,#FFD84D,rgba(255,216,77,0));transform-origin:50% 50%}
+.gbox .base{position:absolute;left:26px;right:26px;bottom:16px;height:112px;border-radius:5px;background:linear-gradient(135deg,#FF2BA6 0%,#D9008D 100%);box-shadow:0 10px 22px rgba(217,0,141,.3)}
+.gbox .base:after{content:"";position:absolute;left:50%;top:0;bottom:0;width:22px;margin-left:-11px;background:linear-gradient(180deg,#A855F7,#7C3AED)}
+.gbox .lid{position:absolute;left:14px;right:14px;bottom:120px;height:34px;border-radius:5px;background:linear-gradient(135deg,#FF4FB8 0%,#E0149A 100%);transform-origin:50% 100%;transition:transform .55s cubic-bezier(.3,1.3,.5,1)}
+.gbox .lid:after{content:"";position:absolute;left:50%;top:0;bottom:0;width:22px;margin-left:-11px;background:linear-gradient(180deg,#B36BF9,#8B3BEF)}
+.gbox .bow{position:absolute;left:50%;bottom:148px;width:84px;height:38px;margin-left:-42px;transform-origin:50% 100%;transition:transform .55s cubic-bezier(.3,1.3,.5,1)}
+.gbox .bow i{position:absolute;top:0;width:36px;height:30px;border-radius:50% 50% 40% 40%;background:linear-gradient(150deg,#B36BF9,#7C3AED)}
+.gbox .bow i:first-child{left:0;transform:rotate(-16deg)}
+.gbox .bow i:last-child{right:0;transform:rotate(16deg)}
+.gbox .knot{position:absolute;left:50%;bottom:148px;width:20px;height:20px;margin-left:-10px;border-radius:var(--r-full);background:#8B3BEF;transition:transform .55s cubic-bezier(.3,1.3,.5,1)}
+.gbox.shake{animation:shk .5s ease}
+@keyframes shk{
+  0%,100%{transform:translateX(0) rotate(0)}
+  15%{transform:translateX(-6px) rotate(-3deg)}
+  35%{transform:translateX(6px) rotate(3deg)}
+  55%{transform:translateX(-5px) rotate(-2deg)}
+  78%{transform:translateX(4px) rotate(2deg)}
+}
+.gbox.open .lid{transform:translateY(-84px) rotate(-16deg)}
+.gbox.open .bow,.gbox.open .knot{transform:translateY(-84px) rotate(-16deg)}
+.gbox.open .rays{opacity:1}
+.gbox.open .base{box-shadow:0 10px 30px rgba(217,0,141,.45),0 0 48px 10px rgba(255,216,77,.5)}
+
+/* small gift for the chat bubble */
+.gbox.mini{width:96px;height:96px}
+.gbox.mini .base{left:16px;right:16px;bottom:8px;height:54px;border-radius:4px}
+.gbox.mini .base:after{width:13px;margin-left:-6.5px}
+.gbox.mini .lid{left:8px;right:8px;bottom:58px;height:18px;border-radius:4px}
+.gbox.mini .lid:after{width:13px;margin-left:-6.5px}
+.gbox.mini .bow{bottom:72px;width:44px;height:20px;margin-left:-22px}
+.gbox.mini .bow i{width:21px;height:18px}
+.gbox.mini .knot{bottom:72px;width:12px;height:12px;margin-left:-6px}
+
+/* ---------------- Wiom TV reveal ---------------- */
+.scr.tv{background:linear-gradient(180deg,#FFE5F6 0%,#FFF1FA 38%,#FFF7FC 100%)}
+.scr.tv:before{
+  content:"";position:absolute;left:50%;top:80px;width:300px;height:300px;transform:translateX(-50%);
+  background:radial-gradient(circle,rgba(217,0,141,.16) 0%,rgba(217,0,141,0) 62%);pointer-events:none;z-index:1;
+}
+.tvbar{flex:0 0 auto;height:44px;display:flex;align-items:center;padding:0 10px;position:relative;z-index:4}
+.closebtn{width:40px;height:40px;border:0;background:transparent;border-radius:var(--r-full);display:grid;place-items:center;cursor:pointer}
+.closebtn svg{width:22px;height:22px;color:var(--text-default)}
+.tvbody{flex:1 1 auto;display:flex;flex-direction:column;padding:0 16px;position:relative;z-index:2;min-height:0}
+.tvspacer{flex:1 1 auto;min-height:10px}
+.claimwrap{padding-top:22px}
+.claim{transition:transform .52s cubic-bezier(.2,.85,.3,1);will-change:transform}
+.eyebrow{font-size:14px;font-weight:600;line-height:20px;color:var(--text-brand);text-align:center}
+.headline{font-size:30px;font-weight:700;line-height:40px;text-align:center;margin-top:10px;letter-spacing:-.015em}
+.genreline{font-size:16px;line-height:24px;color:var(--text-subtle);text-align:center;margin-top:8px}
+
+.sheet{
+  flex:0 0 auto;margin:0 -16px;background:var(--bg-default);
+  border-radius:var(--r-xl) var(--r-xl) 0 0;box-shadow:0 -8px 24px rgba(22,16,33,.14);
+  padding:14px 16px 22px;position:relative;z-index:3;
+  transform:translateY(120%);opacity:0;
+  transition:transform .52s cubic-bezier(.2,.85,.3,1), opacity .34s ease;will-change:transform;
+}
+.sheet.in{transform:translateY(0);opacity:1}
+.sheetlabel{font-size:13px;font-weight:600;line-height:19px;color:var(--text-subtle);display:block;padding-bottom:2px}
+
+.feed{position:absolute;inset:0;background:linear-gradient(160deg,#1B2235 0%,#0C0F18 100%);overflow:hidden}
+.feed .pl,.feed .pr{position:absolute;top:16%;width:17%;height:44%;border-radius:2px}
+.feed .pl{left:3%;background:linear-gradient(170deg,#4A2C3A,#241620)}
+.feed .pr{right:3%;background:linear-gradient(170deg,#2C3A4A,#161E28)}
+.feed .pc{position:absolute;left:22%;right:22%;top:16%;height:44%;border-radius:2px;background:linear-gradient(165deg,#3A3326,#1A1812)}
+.feed .lg{position:absolute;left:4%;top:5%;font-weight:700;letter-spacing:.04em;color:#fff;background:#B3000F;padding:0 4px;border-radius:2px;font-size:7px;line-height:11px;white-space:nowrap}
+.feed .st{position:absolute;left:0;right:0;bottom:5%;height:18%;background:#C8102E;display:flex;align-items:center;padding:0 5px;font-weight:700;color:#fff;overflow:hidden;white-space:nowrap;font-size:7.5px;line-height:10px}
+.feed.swap{animation:swap .45s ease}
+@keyframes swap{0%{opacity:.25;filter:brightness(1.5)}100%{opacity:1;filter:none}}
+@keyframes blink{0%,100%{opacity:.4}50%{opacity:1}}
+.livedot{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:700;color:#D92130;letter-spacing:.04em}
+.livedot i{width:5px;height:5px;border-radius:var(--r-full);background:#D92130;animation:blink 1.3s steps(2) infinite}
+
+.chrow{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--stroke-default)}
+.chrow:last-of-type{border-bottom:0}
+.chrow .th{position:relative;flex:0 0 auto;width:74px;height:47px;border-radius:var(--r-sm);overflow:hidden;background:#000}
+.chrow .tx{flex:1;min-width:0}
+.chrow .tx .n{font-size:14px;font-weight:600;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chrow .tx .p{font-size:11px;line-height:15px;color:var(--text-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.morecard{display:flex;align-items:center;gap:10px;margin-top:13px;padding:10px 12px;border-radius:var(--r-md);background:var(--bg-subtle)}
+.morecard .stack{display:flex;flex:0 0 auto}
+.morecard .stack span{width:22px;height:22px;border-radius:var(--r-tiny);border:2px solid var(--bg-subtle);margin-left:-8px}
+.morecard .stack span:first-child{margin-left:0}
+.morecard .tx{font-size:13px;line-height:18px;color:var(--text-subtle)}
+.morecard .tx b{font-weight:700;color:var(--text-default)}
+.gap{height:34px}
+.chatline{display:flex;align-items:center;gap:8px;justify-content:center;font-size:12px;line-height:17px;color:var(--text-subtle);padding-bottom:12px}
+.chatline b{font-weight:700;color:var(--info)}
+.chatline svg{width:15px;height:15px;color:var(--info);flex:0 0 auto}
+/* ---------------- floating step nav (phone only) ---------------- */
+/* sits on the decorative status strip, so it never covers a tap target */
+.fab{
+  display:none;position:fixed;right:6px;top:calc(2px + env(safe-area-inset-top));
+  width:30px;height:30px;border-radius:var(--r-full);border:0;z-index:40;
+  background:rgba(22,16,33,.58);color:#fff;font-family:inherit;font-size:13px;font-weight:700;
+  line-height:30px;padding:0;cursor:pointer;
+}
+.fab:active{background:rgba(22,16,33,.9)}
+.navsheet{
+  display:none;position:fixed;inset:0;z-index:50;
+}
+.navsheet.open{display:block}
+.navsheet .veil{position:absolute;inset:0;background:rgba(22,16,33,.5)}
+.navsheet .inner{
+  position:absolute;left:0;right:0;bottom:0;max-height:76%;overflow-y:auto;
+  background:#fff;border-radius:var(--r-xl) var(--r-xl) 0 0;
+  padding:10px 12px calc(18px + env(safe-area-inset-bottom));
+}
+.navsheet .grab{width:38px;height:4px;border-radius:var(--r-full);background:var(--stroke-subtle);margin:4px auto 10px}
+.navsheet .rt{font-size:12px;font-weight:600;color:var(--text-subtle);padding:0 8px 8px}
+.navsheet button.step{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:transparent;
+  font-family:inherit;font-size:14px;line-height:20px;color:var(--text-default);
+  padding:11px 10px;border-radius:var(--r-md);cursor:pointer;
+}
+.navsheet button.step.on{background:var(--bg-brand-subtle);font-weight:600}
+.navsheet button.step .n{
+  flex:0 0 auto;width:24px;height:24px;border-radius:var(--r-full);display:grid;place-items:center;
+  background:var(--bg-subtle);color:var(--text-subtle);font-size:11px;font-weight:700;
+}
+.navsheet button.step.on .n{background:var(--bg-brand);color:#fff}
+.navsheet button.step.done .n{background:var(--bg-positive-subtle);color:var(--text-positive)}
+.navsheet .restart{
+  width:100%;margin-top:8px;height:48px;border:0;border-radius:var(--r-lg);
+  background:var(--bg-brand);color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;
+}
+
+/* ---------------- phone browser: full bleed prototype ---------------- */
+@media (max-width:820px){
+  body{padding:0;background:#000;overflow:hidden}
+  .page{max-width:none}
+  .page h1,.page .sub,.page .note,.rail,.sidenote,.caption,.ctrl{display:none}
+  .stage{display:block;margin:0;gap:0}
+  .phonewrap{width:100%}
+  .phone{
+    width:100vw;height:100vh;height:100dvh;
+    border-radius:0;border:0;box-shadow:none;
+  }
+  .fab{display:block}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>रिचार्ज फ्लो · तोहफ़ा खुलते ही Wiom TV</h1>
+  <div class="sub">CA Nov Sprint 2026 के रिन्यूअल फ्लो पर बना क्लिक करने लायक प्रोटोटाइप. आखिर में तोहफ़े का बॉक्स खुलता है और कूपन की जगह Wiom TV वाली वैल्यू रिवील स्क्रीन आती है.</div>
+  <div class="note"><b>फर्क सिर्फ आखिरी कदम में है:</b> फिगमा में बॉक्स खुलने पर ₹20 की छूट का कूपन आता है. यहां बॉक्स खुलने पर Wiom TV फ्री है वाली स्क्रीन आती है, जिसमें बॉटम शीट 3 सेकंड बाद ऊपर चढ़ती है.</div>
+
+  <div class="stage">
+    <div class="rail" id="rail"><div class="rt">फ्लो के कदम</div></div>
+
+    <div class="phonewrap">
+      <div class="caption" id="cap"></div>
+      <div class="phone" id="phone"></div>
+      <div class="ctrl">
+        <button id="prev">पीछे</button>
+        <button id="next" class="pri">आगे</button>
+        <button id="restart">शुरू से</button>
+      </div>
+    </div>
+
+    <div class="sidenote">
+      <h3>क्या देखना है</h3>
+      <p>हर स्क्रीन पर गुलाबी बटन या चैट का लिंक दबाकर आगे बढ़ें. बाईं तरफ की लिस्ट से किसी भी कदम पर सीधे जा सकते हैं.</p>
+      <ul>
+        <li><b>कदम 7</b> भुगतान जाँचने वाली स्क्रीन अपने आप आगे बढ़ जाती है.</li>
+        <li><b>कदम 10</b> बॉक्स पर टैप करें. बॉक्स हिलता है, ढक्कन उड़ता है, फिर Wiom TV खुलता है.</li>
+        <li><b>कदम 11</b> दावा पहले बीच में रहता है, 3 सेकंड बाद शीट आती है और दावा ऊपर खिसक जाता है.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fab" aria-label="कदम">☰</button>
+<div class="navsheet" id="navsheet">
+  <div class="veil" data-close></div>
+  <div class="inner"><div class="grab"></div><div class="rt">फ्लो के कदम</div>
+    <div id="navsteps"></div>
+    <button class="restart" id="navrestart">शुरू से चलाएं</button>
+  </div>
+</div>
+
+<script>
+/* ====================== shared bits ====================== */
+const CHANNELS = [
+  { n:'आज तक',       s:'AAJ TAK', p:'हल्ला बोल',        strap:'दिल्ली में मौसम बदला, बारिश के आसार' },
+  { n:'ज़ी सिनेमा',   s:'ZEE',     p:'गंगाजल',           strap:'आज की फिल्म, बिना रुकावट' },
+  { n:'भक्ति TV',     s:'BHAKTI',  p:'सुबह की आरती',     strap:'आज का पंचांग और शुभ मुहूर्त' },
+  { n:'ABP न्यूज़',    s:'ABP',     p:'महादंगल',          strap:'आज की सबसे बड़ी खबर' },
+  { n:'दंगल TV',      s:'DANGAL',  p:'भाभीजी घर पर हैं', strap:'आज रात 9 बजे नया एपिसोड' },
+  { n:'B4U म्यूज़िक', s:'B4U',     p:'सदाबहार गाने',      strap:'टॉप 20 गाने, हर घंटे' }
+];
+let feedN = 0;
+const feed = () => '<div class="feed" data-auto="' + (feedN++) + '"><span class="lg"></span><span class="pl"></span><span class="pc"></span><span class="pr"></span><div class="st"></div></div>';
+
+const ic = {
+  back:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
+  close: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  head:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2z"/></svg>',
+  phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1 1 .3 1.9.6 2.8a2 2 0 0 1-.5 2.1L7.8 9.8a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.8.6a2 2 0 0 1 1.7 2z"/></svg>',
+  kebab: '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 16V9M12 16V5M17 16v-4"/></svg>',
+  home:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  send:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11.5 21 3l-8.5 18-2-7.5z"/></svg>',
+  chev:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12.5 5.5 5.5L20 7"/></svg>',
+  tag:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M7 7h.01M3.5 10.5 10.5 3.5h6a2 2 0 0 1 2 2v6l-7 7z"/></svg>',
+  upi:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg>',
+  auto:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>',
+  wiom:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 14c2.5-7 5-7 7.5 0S15.5 21 18 14"/></svg>',
+  chat:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5a8.4 8.4 0 0 1-.8-3.6 8.4 8.4 0 0 1 8.4-8.4h.5a8.4 8.4 0 0 1 8 8z"/></svg>',
+  wifi:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20 2 8.5A15 15 0 0 1 22 8.5z"/></svg>',
+  batt:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 11v2"/><rect x="5" y="9" width="6" height="6" fill="currentColor" stroke="none"/></svg>'
+};
+
+const sbar = '<div class="sbar"><span>4:35 PM</span><span class="rr">' + ic.wifi + ic.batt + '<span>50%</span></span></div>';
+const tbar = (title) => '<div class="tbar"><button class="ib" data-go="back">' + ic.back + '</button>' +
+  (title ? '<span class="ttl">' + title + '</span>' : '<span class="sp"></span>') +
+  '<button class="ib">' + ic.head + '</button><span class="sq">अ</span><span style="width:8px"></span></div>';
+
+const giftBox = (cls) => '<div class="gbox ' + (cls || '') + '">' +
+  '<span class="rays">' + Array.from({length:12}, (_,i) => '<span style="transform:rotate(' + (i*30) + 'deg) translateY(-62px)"></span>').join('') + '</span>' +
+  '<span class="lid"></span><span class="bow"><i></i><i></i></span><span class="knot"></span><span class="base"></span></div>';
+
+/* ====================== screens ====================== */
+const PLANS = [
+  { d:'1 दिन',  n:'24 घंटे',  p:23 },
+  { d:'2 दिन',  n:'48 घंटे',  p:45 },
+  { d:'7 दिन',  n:'1 हफ़्ता',  p:150 },
+  { d:'14 दिन', n:'2 हफ्ते',  p:290 },
+  { d:'28 दिन', n:'4 हफ्ते',  p:565 },
+  { d:'84 दिन', n:'12 हफ्ते', p:1650 },
+  { d:'112 दिन',n:'16 हफ्ते', p:2150 },
+  { d:'360 दिन',n:'1 साल',    p:6500 }
+];
+
+const chatHead = '<div class="chead"><span class="logo">' + ic.wiom + '</span>' +
+  '<span class="nm"><b>व्योम</b><span>ऑनलाइन</span></span>' +
+  '<button class="ib">' + ic.phone + '</button><button class="ib">' + ic.kebab + '</button></div>';
+
+const statCard = (on) => '<div class="statcard"><span class="ic">' + ic.chart + '</span>' +
+  '<span class="tx">घर का नेट: रमेश<br><b>स्थिति: </b>' +
+  (on ? '<span class="on">चालू है</span>' : '<span class="off">नेट रुका हुआ है</span>') + '</span></div>';
+
+const cinput = '<div class="cinput"><span class="f">यहाँ पूछें....</span><span class="snd">' + ic.send + '</span></div>';
+
+const SCREENS = [
+{
+  id:'chatOff', rail:'चैट · नेट रुका हुआ है',
+  cap:'<b>शुरुआत</b>रिचार्ज खत्म, नेट रुका हुआ है. व्योम चैट में यही पहली खबर है.',
+  html: sbar + chatHead + statCard(false) +
+    '<div class="msgs">' +
+      '<div class="bub"><p>आपका रिचार्ज खत्म हो गया है. नेट अभी रुका हुआ है।</p><div class="ts">10:12 AM</div></div>' +
+    '</div>' + cinput,
+  auto: 1400
+},
+{
+  id:'chatAsk', rail:'चैट · रिचार्ज करें',
+  cap:'<b>रिचार्ज का न्योता</b>चैट में ही रिचार्ज करें का बटन आता है.',
+  html: sbar + chatHead + statCard(false) +
+    '<div class="msgs">' +
+      '<div class="bub"><p>आपका रिचार्ज खत्म हो गया है. नेट अभी रुका हुआ है।</p><div class="ts">10:12 AM</div></div>' +
+      '<div class="bub"><p>आप अभी रिचार्ज कर सकते हैं, पैसे पहुंचते ही नेट तुरंत चालू हो जाएगा।</p><div class="ts">10:12 AM</div>' +
+        '<button class="act" data-go="next">रिचार्ज करें</button></div>' +
+    '</div>' + cinput
+},
+{
+  id:'plans', rail:'प्लान चुनें',
+  cap:'<b>अपने हिसाब से रिचार्ज चुनें</b>1 दिन से 360 दिन तक. 7 दिन वाला पहले से चुना हुआ है.',
+  html: sbar + tbar('') + '<div class="h1">अपने हिसाब से रिचार्ज चुनें</div>' +
+    '<div class="scroll" id="planlist">' +
+      PLANS.map((p,i) => '<div class="planrow' + (i===2 ? ' sel' : '') + '" data-plan="' + i + '">' +
+        '<span class="rd"></span><span class="tx"><span class="d">' + p.d + ' <span>(' + p.n + ')</span></span>' +
+        (p.tag ? '<span class="tag">' + p.tag + '</span>' : '') + '</span>' +
+        '<span class="pr">' + (p.cut ? '<span class="cut">₹' + p.cut + '</span>' : '') +
+        '<span class="amt">₹' + p.p + '</span></span></div>').join('') +
+      '<div style="height:8px"></div>' +
+    '</div>' +
+    '<div class="footbar"><button class="btn" data-go="next" id="planCta">आगे बढ़ें (₹150)</button></div>'
+},
+{
+  id:'bill', rail:'बिल का विवरण',
+  cap:'<b>बिल का विवरण</b>प्लान, तारीखें और कुल देय. कूपन यहीं लग सकता है.',
+  html: sbar + tbar('बिल का विवरण') +
+    '<div class="scroll">' +
+      '<div class="acct"><span class="ic">' + ic.home + '</span><span class="tx"><b>Wiom Ramesh 1234</b><span>98765 43210</span></span></div>' +
+      '<div class="hr"></div>' +
+      '<div class="billrow"><span class="l">7 दिन · अनलिमिटेड</span><span class="r">₹150</span></div>' +
+      '<div class="billdates">27 सित 25 से 3 अक्टू 25 · 7 दिन</div>' +
+      '<div class="hr"></div>' +
+      '<div class="total"><span class="l">कुल देय</span><span class="r">₹150</span></div>' +
+      '<div class="coupon"><span class="ic">' + ic.tag + '</span><span class="tx">कूपन का प्रयोग करें</span><span class="ch">' + ic.chev + '</span></div>' +
+    '</div>' +
+    '<div class="footbar"><button class="btn" data-go="next">भुगतान करें (₹150)</button></div>'
+},
+{
+  id:'method', rail:'भुगतान का तरीका',
+  cap:'<b>तरीका चुनें</b>UPI, कार्ड या दूसरे ऑनलाइन तरीके.',
+  html: sbar + tbar('') + '<div class="h1">₹150 के भुगतान का तरीका चुनें</div>' +
+    '<div class="scroll">' +
+      '<div class="paycard" data-go="next"><span class="ic">' + ic.upi + '</span><span class="tx">' +
+        '<span class="t">UPI / ऑनलाइन भुगतान</span><span class="s">UPI, क्रेडिट/डेबिट कार्ड और अन्य तरीके</span>' +
+        '<span class="paylogos"><span>UPI</span><span>VISA</span><span>MC</span><span>RuPay</span></span></span></div>' +
+      '<div class="nolink">UPI/कार्ड नहीं है? ' + ic.chev + '</div>' +
+    '</div>'
+},
+{
+  id:'upi', rail:'UPI ऐप',
+  cap:'<b>UPI ऐप</b>ऐप से बाहर, पैसे भेजने की पुष्टि.',
+  cls:'upi',
+  html: sbar +
+    '<div class="upitop"><span class="nm">UPI ऐप</span><span class="tm">01:25</span></div>' +
+    '<div class="upibody">' +
+      '<div class="to">भुगतान किसे</div><div class="mer">Wiom Broadband</div>' +
+      '<div class="amt">₹150</div><div class="vpa">wiom@upibank</div>' +
+      '<div class="bank"><span class="d">RB</span><span class="t">बैंक खाता<span>XXXX 4821</span></span>' + ic.chev + '</div>' +
+    '</div>' +
+    '<div class="upifoot"><button class="upibtn" data-go="next">Pay ₹150</button></div>'
+},
+{
+  id:'checking', rail:'भुगतान जाँचा जा रहा है',
+  cap:'<b>धैर्य रखें</b>यह स्क्रीन अपने आप आगे बढ़ जाती है.',
+  html: sbar + '<div class="tbar"><span class="sp"></span></div>' +
+    '<div class="mid"><div class="spin"></div>' +
+      '<h2>धैर्य रखें</h2><p>भुगतान की स्थिति जाँची जा रही है</p>' +
+      '<div class="counter" id="cnt">00 : 10 सेकंड</div>' +
+      '<div class="warn">भुगतान पूरा होने तक इस स्क्रीन को बंद न करें</div>' +
+    '</div>'
+},
+{
+  id:'success', rail:'भुगतान सफल',
+  cap:'<b>भुगतान सफल हुआ</b>यहां से वापस चैट में.',
+  html: sbar + '<div class="tbar"><span class="sp"></span><span class="sq">अ</span><span style="width:8px"></span></div>' +
+    '<div class="scroll">' +
+      '<div style="height:18px"></div>' +
+      '<div class="tick"><span class="in">' + ic.check + '</span></div>' +
+      '<div class="sucT">भुगतान सफल हुआ!</div>' +
+      '<div class="sucA">अमाउंट: <b>₹150</b></div>' +
+      '<div style="height:16px"></div>' +
+      '<div class="acct"><span class="ic">' + ic.home + '</span><span class="tx"><b>Wiom Ramesh 1234</b><span>98765 43210</span></span></div>' +
+      '<div class="deets"><div class="g">' +
+        '<div><div class="k">प्लान</div><div class="v">7 दिन · अनलिमिटेड</div></div>' +
+        '<div><div class="k">ट्रांसेक्शन तारीख</div><div class="v">27 सितंबर 2025</div></div>' +
+      '</div><div class="full"><div class="k">ट्रांसेक्शन ID</div><div class="v">custGen_8932974849_9230982394_1</div></div></div>' +
+    '</div>' +
+    '<div class="footbar"><button class="btn" data-go="next">चैट में जानकारी देखें</button></div>'
+},
+{
+  id:'chatWin', rail:'चैट · इनाम मिला',
+  cap:'<b>नेट चालू, और एक इनाम</b>चैट में ही इनाम देखें का बटन.',
+  html: sbar + chatHead + statCard(true) +
+    '<div class="msgs" id="winmsgs">' +
+      '<div class="bub"><p>बहुत बढ़िया! आपका <b>₹150</b> का रिचार्ज सफल हो गया है। आपका नेट चालू हो गया है।</p><div class="ts">10:15 AM</div></div>' +
+      '<div class="bub"><p>मन भर कर इस्तेमाल करें और उसके बाद अपनी ज़रूरत के हिसाब से रिचार्ज करें!</p><div class="ts">10:15 AM</div></div>' +
+      '<div class="bub"><div class="giftbox">' + giftBox('mini') + '</div>' +
+        '<p><b>इनाम मिला 🎉</b><br>व्योम की तरफ़ से आपके लिए एक इनाम आया है। देखने के लिए नीचे "इनाम देखें" पर क्लिक करें।</p>' +
+        '<div class="ts">10:15 AM</div><button class="act" data-go="next">इनाम देखें</button></div>' +
+    '</div>' + cinput
+},
+{
+  id:'gift', rail:'तोहफ़ा · बॉक्स खोलें',
+  cap:'<b>आपके लिए एक तोहफ़ा</b>बॉक्स पर टैप करें.',
+  cls:'gift',
+  html: sbar + '<div class="tbar"><span class="sp"></span><span class="sq">अ</span><span style="width:8px"></span></div>' +
+    '<div class="giftT">आपके लिए एक तोहफ़ा 🎁</div>' +
+    '<div class="giftstage" id="giftstage">' + giftBox('big') + '</div>' +
+    '<div class="gifthint">बॉक्स पर टैप करके खोलें</div>'
+},
+{
+  id:'tv', rail:'Wiom TV फ्री है',
+  cap:'<b>तोहफ़ा यही है</b>दावा पहले बीच में, 3 सेकंड बाद शीट ऊपर चढ़ती है.',
+  cls:'tv',
+  html: sbar +
+    '<div class="tvbar"><button class="closebtn" data-go="back">' + ic.close + '</button></div>' +
+    '<div class="tvbody lift">' +
+      '<div class="claimwrap"><div class="claim">' +
+        '<div class="eyebrow">आपके Wiom Net के साथ</div>' +
+        '<div class="headline">Wiom TV फ्री है</div>' +
+        '<div class="genreline">न्यूज़, फिल्में, म्यूज़िक, स्पोर्ट्स, कुछ भी देखें</div>' +
+      '</div></div>' +
+      '<div class="tvspacer"></div>' +
+      '<div class="sheet">' +
+        '<span class="sheetlabel">अभी ये चल रहा है</span>' +
+        Array.from({length:3}, () => '<div class="chrow"><div class="th">' + feed() + '</div>' +
+          '<div class="tx"><div class="n" data-nm></div><div class="p" data-pg></div></div>' +
+          '<span class="livedot"><i></i>LIVE</span></div>').join('') +
+        '<div class="morecard"><span class="stack">' +
+          '<span style="background:linear-gradient(140deg,#B3000F,#5E0710)"></span>' +
+          '<span style="background:linear-gradient(140deg,#6B2D8F,#2C1140)"></span>' +
+          '<span style="background:linear-gradient(140deg,#0F6B4A,#06301F)"></span>' +
+          '<span style="background:linear-gradient(140deg,#13406B,#071E36)"></span>' +
+          '</span><span class="tx">और <b>242</b> चैनल, सब फ्री</span></div>' +
+        '<div class="gap"></div>' +
+        '<div class="chatline">' + ic.chat + '<span>बाद में चैट में <b>wiom tv</b> लिखें, लिंक आ जाएगा</span></div>' +
+        '<button class="btn">अभी देखना शुरू करें</button>' +
+      '</div>' +
+    '</div>'
+}
+];
+
+/* ====================== wiring ====================== */
+const phone = document.getElementById('phone');
+const rail  = document.getElementById('rail');
+const cap   = document.getElementById('cap');
+let cur = 0, timers = [];
+const SHEET_DELAY = 3000;
+
+phone.innerHTML = SCREENS.map(s => '<div class="scr ' + (s.cls || '') + '" data-id="' + s.id + '">' + s.html + '</div>').join('');
+SCREENS.forEach((s, i) => {
+  const b = document.createElement('button');
+  b.innerHTML = '<span class="n">' + (i + 1) + '</span><span>' + s.rail + '</span>';
+  b.addEventListener('click', () => go(i));
+  rail.appendChild(b);
+});
+const navsteps = document.getElementById('navsteps');
+SCREENS.forEach((s, i) => {
+  const b = document.createElement('button');
+  b.className = 'step';
+  b.innerHTML = '<span class="n">' + (i + 1) + '</span><span>' + s.rail + '</span>';
+  b.addEventListener('click', () => { closeNav(); go(i); });
+  navsteps.appendChild(b);
+});
+const navBtns  = navsteps.querySelectorAll('button');
+const railBtns = rail.querySelectorAll('button');
+const scrEls   = phone.querySelectorAll('.scr');
+
+const navsheet = document.getElementById('navsheet');
+function openNav(){ navsheet.classList.add('open'); }
+function closeNav(){ navsheet.classList.remove('open'); }
+document.getElementById('fab').addEventListener('click', openNav);
+navsheet.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) closeNav(); });
+document.getElementById('navrestart').addEventListener('click', () => { closeNav(); go(0); });
+
+function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
+function later(fn, ms){ timers.push(setTimeout(fn, ms)); }
+
+function go(i){
+  if (i < 0 || i >= SCREENS.length) return;
+  clearTimers();
+  cur = i;
+  scrEls.forEach((el, k) => el.classList.toggle('on', k === i));
+  railBtns.forEach((b, k) => { b.classList.toggle('on', k === i); b.classList.toggle('done', k < i); });
+  navBtns.forEach((b, k) => { b.classList.toggle('on', k === i); b.classList.toggle('done', k < i); });
+  cap.innerHTML = SCREENS[i].cap;
+  document.getElementById('prev').disabled = i === 0;
+  document.getElementById('next').disabled = i === SCREENS.length - 1;
+  onEnter(SCREENS[i].id, scrEls[i]);
+}
+
+function onEnter(id, el){
+  if (id === 'chatOff'){ later(() => go(1), 1900); }
+
+  if (id === 'checking'){
+    let n = 10;
+    const cnt = el.querySelector('#cnt');
+    const tickDown = () => {
+      n--;
+      if (cnt) cnt.textContent = '00 : ' + (n < 10 ? '0' + n : n) + ' सेकंड';
+      if (n > 6) later(tickDown, 700); else later(() => go(cur + 1), 700);
+    };
+    if (cnt) cnt.textContent = '00 : 10 सेकंड';
+    later(tickDown, 700);
+  }
+
+  if (id === 'gift'){
+    const box = el.querySelector('.gbox');
+    if (box) box.classList.remove('shake', 'open');
+  }
+
+  if (id === 'tv'){
+    const sheet = el.querySelector('.sheet');
+    sheet.classList.remove('in');
+    placeClaim(el, false);
+    later(() => { sheet.classList.add('in'); placeClaim(el, true); }, SHEET_DELAY);
+  }
+}
+
+function placeClaim(el, lifted){
+  const body = el.querySelector('.tvbody');
+  const claim = el.querySelector('.claim');
+  if (!body || !claim) return;
+  if (lifted){ claim.style.transform = 'translateY(0)'; return; }
+  const shift = Math.max(0, (body.clientHeight - claim.offsetHeight) / 2 - claim.offsetTop);
+  claim.style.transition = 'none';
+  claim.style.transform = 'translateY(' + shift + 'px)';
+  void claim.offsetWidth;
+  claim.style.transition = '';
+}
+
+/* taps inside the phone */
+phone.addEventListener('click', (e) => {
+  const giftStage = e.target.closest('#giftstage');
+  if (giftStage){
+    const box = giftStage.querySelector('.gbox');
+    if (box.classList.contains('open')) return;
+    box.classList.add('shake');
+    later(() => { box.classList.remove('shake'); box.classList.add('open'); }, 500);
+    later(() => go(cur + 1), 1400);
+    return;
+  }
+  const row = e.target.closest('.planrow');
+  if (row){
+    const list = row.closest('.scroll');
+    list.querySelectorAll('.planrow').forEach(r => r.classList.remove('sel'));
+    row.classList.add('sel');
+    const p = PLANS[parseInt(row.dataset.plan, 10)];
+    const cta = document.getElementById('planCta');
+    if (cta) cta.textContent = 'आगे बढ़ें (₹' + p.p + ')';
+    return;
+  }
+  const t = e.target.closest('[data-go]');
+  if (!t) return;
+  if (t.dataset.go === 'back') go(cur - 1); else go(cur + 1);
+});
+
+document.getElementById('prev').addEventListener('click', () => go(cur - 1));
+document.getElementById('next').addEventListener('click', () => go(cur + 1));
+document.getElementById('restart').addEventListener('click', () => go(0));
+let rz;
+window.addEventListener('resize', () => {
+  clearTimeout(rz);
+  rz = setTimeout(() => {
+    if (SCREENS[cur].id !== 'tv') return;
+    const el = scrEls[cur];
+    placeClaim(el, el.querySelector('.sheet').classList.contains('in'));
+  }, 120);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') go(cur + 1);
+  if (e.key === 'ArrowLeft') go(cur - 1);
+});
+
+/* live feed cycling */
+let tick = 0;
+function cycle(first){
+  document.querySelectorAll('.feed[data-auto]').forEach(el => {
+    const off = parseInt(el.dataset.auto, 10) || 0;
+    const ch = CHANNELS[(tick + off) % CHANNELS.length];
+    el.querySelector('.lg').textContent = ch.s;
+    el.querySelector('.st').textContent = ch.strap;
+    if (!first){ el.classList.remove('swap'); void el.offsetWidth; el.classList.add('swap'); }
+    const host = el.closest('.chrow');
+    if (host){
+      const nm = host.querySelector('[data-nm]');
+      const pg = host.querySelector('[data-pg]');
+      if (nm) nm.textContent = ch.n;
+      if (pg) pg.textContent = ch.p;
+    }
+  });
+  tick++;
+}
+cycle(true);
+setInterval(cycle, 4000);
+
+go(0);
+</script>
+</body>
+</html>
