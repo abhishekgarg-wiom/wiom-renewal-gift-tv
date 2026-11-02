@@ -103,6 +103,8 @@ body{font-family:"Noto Sans Devanagari","Noto Sans",system-ui,sans-serif;backgro
 .chead .nm span{font-size:11px;line-height:15px;color:var(--text-subtle)}
 .chead .ib{width:36px;height:36px;border:0;background:transparent;display:grid;place-items:center;cursor:pointer}
 .chead .ib svg{width:20px;height:20px;color:#352D42}
+.chead .ib.gift{position:relative}
+.chead .ib.gift.dot:after{content:"";position:absolute;right:5px;top:5px;width:8px;height:8px;border-radius:var(--r-full);background:var(--bg-brand);border:2px solid #fff}
 
 .statcard{margin:10px 12px 0;background:#fff;border-radius:var(--r-md);box-shadow:var(--sh-sm);padding:9px 12px;display:flex;align-items:center;gap:10px}
 .statcard .ic{width:28px;height:28px;border-radius:var(--r-sm);background:var(--bg-subtle);display:grid;place-items:center}
@@ -226,6 +228,7 @@ body{font-family:"Noto Sans Devanagari","Noto Sans",system-ui,sans-serif;backgro
 .giftT{font-size:20px;font-weight:700;line-height:28px;text-align:center;padding:14px 24px 0}
 .giftstage{flex:1 1 auto;margin:18px 16px;border-radius:var(--r-lg);background:var(--bg-positive-subtle);display:grid;place-items:center;cursor:pointer;position:relative;overflow:hidden}
 .gifthint{flex:0 0 auto;text-align:center;font-size:13px;line-height:19px;color:var(--text-subtle);padding:0 24px 26px}
+.giftstage.last{margin-bottom:26px}
 
 .gbox{width:196px;height:196px;position:relative}
 .gbox .rays{position:absolute;inset:-40px;opacity:0;transition:opacity .3s ease}
@@ -319,6 +322,28 @@ body{font-family:"Noto Sans Devanagari","Noto Sans",system-ui,sans-serif;backgro
 .chatline{display:flex;align-items:center;gap:8px;justify-content:center;font-size:12px;line-height:17px;color:var(--text-subtle);padding-bottom:12px}
 .chatline b{font-weight:700;color:var(--info)}
 .chatline svg{width:15px;height:15px;color:var(--info);flex:0 0 auto}
+.chatline span{max-width:272px}
+.chatline .gi{display:inline-block;width:13px;height:13px;vertical-align:-2px}
+.chatline .gi svg{width:13px;height:13px;color:var(--text-default)}
+.sidenote .copybox{margin-top:16px;padding-top:14px;border-top:1px solid var(--stroke-default)}
+.sidenote .copybox .lab{font-size:12px;font-weight:600;color:var(--text-subtle);margin-bottom:8px}
+.copyopt{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:0;background:transparent;
+  font-family:inherit;font-size:13px;line-height:18px;color:var(--text-default);
+  padding:8px 9px;border-radius:var(--r-md);cursor:pointer;
+}
+.copyopt:hover{background:var(--bg-surface)}
+.copyopt.on{background:var(--bg-brand-subtle);font-weight:600}
+.copyopt .k{
+  flex:0 0 auto;width:21px;height:21px;border-radius:var(--r-full);display:grid;place-items:center;
+  background:var(--bg-subtle);color:var(--text-subtle);font-size:11px;font-weight:700;
+}
+.copyopt.on .k{background:var(--bg-brand);color:#fff}
+.copyopt.m{font-size:14px;line-height:20px;padding:11px 10px}
+.copyopt.m .k{width:24px;height:24px}
+.sidenote .hintline{margin-top:10px;padding:9px 11px;border-radius:var(--r-sm);background:var(--bg-info-subtle);font-size:12px;line-height:18px;color:var(--text-subtle)}
+.sidenote .hintline b{color:var(--info)}
+
 /* ---------------- floating step nav (phone only) ---------------- */
 /* sits on the decorative status strip, so it never covers a tap target */
 .fab{
@@ -399,6 +424,11 @@ body{font-family:"Noto Sans Devanagari","Noto Sans",system-ui,sans-serif;backgro
         <li><b>कदम 10</b> बॉक्स पर टैप करें. बॉक्स हिलता है, ढक्कन उड़ता है, फिर Wiom TV खुलता है.</li>
         <li><b>कदम 11</b> दावा पहले बीच में रहता है, 3 सेकंड बाद शीट आती है और दावा ऊपर खिसक जाता है.</li>
       </ul>
+      <div class="copybox">
+        <div class="lab">कदम 9 की कॉपी</div>
+        <div id="copypicker"></div>
+        <div class="hintline">कोई भी विकल्प TV का नाम नहीं खोलता. कोई ये भी नहीं बताता कि ये नेट या रिचार्ज के साथ कहां से आती है, क्योंकि ये शुरू से व्योम के साथ है. बात सिर्फ इतनी है कि ग्राहक को पता नहीं.<br><br>अभी <b>C</b> चुना हुआ है. कदम 10 अब हर विकल्प में एक ही लाइन कहता है: बॉक्स को टैप करके खोलिए.<br><br><b>ऑफर शब्द मत रखिए:</b> टेलीकॉम में ऑफर का मतलब दाम की छूट होता है, वही गलती इनाम वाली थी.</div>
+      </div>
     </div>
   </div>
 </div>
@@ -408,6 +438,8 @@ body{font-family:"Noto Sans Devanagari","Noto Sans",system-ui,sans-serif;backgro
   <div class="veil" data-close></div>
   <div class="inner"><div class="grab"></div><div class="rt">फ्लो के कदम</div>
     <div id="navsteps"></div>
+    <div class="rt" style="padding-top:12px">कदम 9 की कॉपी</div>
+    <div id="copypickerm"></div>
     <button class="restart" id="navrestart">शुरू से चलाएं</button>
   </div>
 </div>
@@ -441,6 +473,7 @@ const ic = {
   auto:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.6-6.4"/><path d="M21 4v5h-5"/></svg>',
   wiom:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 14c2.5-7 5-7 7.5 0S15.5 21 18 14"/></svg>',
   chat:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 9 9 0 0 1-3.8-.8L3 21l1.9-5a8.4 8.4 0 0 1-.8-3.6 8.4 8.4 0 0 1 8.4-8.4h.5a8.4 8.4 0 0 1 8 8z"/></svg>',
+  gift:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M3 7h18v4H3zM12 7v14"/><path d="M12 7S10.5 3 8.5 3a2 2 0 0 0 0 4zM12 7s1.5-4 3.5-4a2 2 0 0 1 0 4z"/></svg>',
   wifi:  '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20 2 8.5A15 15 0 0 1 22 8.5z"/></svg>',
   batt:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 11v2"/><rect x="5" y="9" width="6" height="6" fill="currentColor" stroke="none"/></svg>'
 };
@@ -466,8 +499,9 @@ const PLANS = [
   { d:'360 दिन',n:'1 साल',    p:6500 }
 ];
 
-const chatHead = '<div class="chead"><span class="logo">' + ic.wiom + '</span>' +
+const chatHead = (dot) => '<div class="chead"><span class="logo">' + ic.wiom + '</span>' +
   '<span class="nm"><b>व्योम</b><span>ऑनलाइन</span></span>' +
+  '<button class="ib gift' + (dot ? ' dot' : '') + '">' + ic.gift + '</button>' +
   '<button class="ib">' + ic.phone + '</button><button class="ib">' + ic.kebab + '</button></div>';
 
 const statCard = (on) => '<div class="statcard"><span class="ic">' + ic.chart + '</span>' +
@@ -480,7 +514,7 @@ const SCREENS = [
 {
   id:'chatOff', rail:'चैट · नेट रुका हुआ है',
   cap:'<b>शुरुआत</b>रिचार्ज खत्म, नेट रुका हुआ है. व्योम चैट में यही पहली खबर है.',
-  html: sbar + chatHead + statCard(false) +
+  html: sbar + chatHead(false) + statCard(false) +
     '<div class="msgs">' +
       '<div class="bub"><p>आपका रिचार्ज खत्म हो गया है. नेट अभी रुका हुआ है।</p><div class="ts">10:12 AM</div></div>' +
     '</div>' + cinput,
@@ -489,7 +523,7 @@ const SCREENS = [
 {
   id:'chatAsk', rail:'चैट · रिचार्ज करें',
   cap:'<b>रिचार्ज का न्योता</b>चैट में ही रिचार्ज करें का बटन आता है.',
-  html: sbar + chatHead + statCard(false) +
+  html: sbar + chatHead(false) + statCard(false) +
     '<div class="msgs">' +
       '<div class="bub"><p>आपका रिचार्ज खत्म हो गया है. नेट अभी रुका हुआ है।</p><div class="ts">10:12 AM</div></div>' +
       '<div class="bub"><p>आप अभी रिचार्ज कर सकते हैं, पैसे पहुंचते ही नेट तुरंत चालू हो जाएगा।</p><div class="ts">10:12 AM</div>' +
@@ -578,25 +612,25 @@ const SCREENS = [
     '<div class="footbar"><button class="btn" data-go="next">चैट में जानकारी देखें</button></div>'
 },
 {
-  id:'chatWin', rail:'चैट · इनाम मिला',
-  cap:'<b>नेट चालू, और एक इनाम</b>चैट में ही इनाम देखें का बटन.',
-  html: sbar + chatHead + statCard(true) +
+  id:'chatWin', rail:'चैट · खुशखबरी',
+  cap:'<b>नेट चालू, और कुछ और भी</b>दाईं तरफ के पैनल से विकल्प बदलें. कोई TV का नाम नहीं खोलता, कोई ये नहीं बताता कि चीज़ कहां से आती है.',
+  html: sbar + chatHead(true) + statCard(true) +
     '<div class="msgs" id="winmsgs">' +
       '<div class="bub"><p>बहुत बढ़िया! आपका <b>₹150</b> का रिचार्ज सफल हो गया है। आपका नेट चालू हो गया है।</p><div class="ts">10:15 AM</div></div>' +
       '<div class="bub"><p>मन भर कर इस्तेमाल करें और उसके बाद अपनी ज़रूरत के हिसाब से रिचार्ज करें!</p><div class="ts">10:15 AM</div></div>' +
       '<div class="bub"><div class="giftbox">' + giftBox('mini') + '</div>' +
-        '<p><b>इनाम मिला 🎉</b><br>व्योम की तरफ़ से आपके लिए एक इनाम आया है। देखने के लिए नीचे "इनाम देखें" पर क्लिक करें।</p>' +
-        '<div class="ts">10:15 AM</div><button class="act" data-go="next">इनाम देखें</button></div>' +
+        '<p><b id="rwHook"></b><br><span id="rwBody"></span></p>' +
+        '<div class="ts">10:15 AM</div><button class="act" data-go="next" id="rwCta"></button></div>' +
     '</div>' + cinput
 },
 {
   id:'gift', rail:'तोहफ़ा · बॉक्स खोलें',
-  cap:'<b>आपके लिए एक तोहफ़ा</b>बॉक्स पर टैप करें.',
+  cap:'<b>बॉक्स वाली स्क्रीन</b>एक ही लाइन, हर विकल्प में वही. सिर्फ खोलने को कहती है.',
   cls:'gift',
   html: sbar + '<div class="tbar"><span class="sp"></span><span class="sq">अ</span><span style="width:8px"></span></div>' +
-    '<div class="giftT">आपके लिए एक तोहफ़ा 🎁</div>' +
-    '<div class="giftstage" id="giftstage">' + giftBox('big') + '</div>' +
-    '<div class="gifthint">बॉक्स पर टैप करके खोलें</div>'
+    '<div class="giftT" id="giftT"></div>' +
+    '<div class="giftstage last" id="giftstage">' + giftBox('big') + '</div>' +
+    ''
 },
 {
   id:'tv', rail:'Wiom TV फ्री है',
@@ -623,12 +657,66 @@ const SCREENS = [
           '<span style="background:linear-gradient(140deg,#13406B,#071E36)"></span>' +
           '</span><span class="tx">और <b>242</b> चैनल, सब फ्री</span></div>' +
         '<div class="gap"></div>' +
-        '<div class="chatline">' + ic.chat + '<span>बाद में चैट में <b>wiom tv</b> लिखें, लिंक आ जाएगा</span></div>' +
+        '<div class="chatline">' + ic.chat + '<span>बाद में चैट के <i class="gi">' + ic.gift + '</i> आइकन से खोलें, या <b>wiom tv</b> लिखें</span></div>' +
         '<button class="btn">अभी देखना शुरू करें</button>' +
       '</div>' +
     '</div>'
 }
 ];
+
+/* ====================== reward copy: six directions ====================== */
+const BOX_TITLE = 'बॉक्स को टैप करके खोलिए 🎁';
+
+const COPY = [
+  { k:'A', nm:'क्या आपको पता है · खोज वाला',
+    hook:'क्या आपको पता है? 🎁',
+    body:'एक चीज़ है जो शायद आपने अब तक इस्तेमाल न की हो, और वो भी बिलकुल फ्री।',
+    cta:'पता करें', },
+  { k:'B', nm:'एक सुविधा जो देखी न हो',
+    hook:'एक सुविधा जो शायद आपने देखी न हो 🎁',
+    body:'ये सुविधा आपके लिए पहले से खुली है, बस एक बार देख लीजिए।',
+    cta:'देखें क्या है', },
+  { k:'C', nm:'कुछ और भी है आपके लिए',
+    hook:'कुछ और भी है आपके लिए 🎁',
+    body:'एक चीज़ और है जो आप इस्तेमाल कर सकते हैं, बिना किसी अलग पैसे के।',
+    cta:'खोलकर देखें', },
+  { k:'D', nm:'पूरे घर के काम की चीज़',
+    hook:'पूरे घर के काम की चीज़ 🎁',
+    body:'कुछ ऐसा है जो घर में सबके काम आता है, और इसका कोई अलग पैसा नहीं लगता।',
+    cta:'देखें क्या है', },
+  { k:'E', nm:'तोहफ़ा · सबसे गर्मजोशी वाला',
+    hook:'आपके लिए एक तोहफ़ा 🎁',
+    body:'व्योम की तरफ़ से आपके लिए एक तोहफ़ा, जो शायद आपने अब तक खोला न हो।',
+    cta:'तोहफ़ा खोलें', },
+  { k:'F', nm:'एक फायदा जो पहले से आपका है',
+    hook:'एक फायदा जो पहले से आपका है',
+    body:'एक फायदा है जो हर दिन काम आता है, पर शायद अब तक आपको पता न हो।',
+    cta:'देख लीजिए', }
+];
+let copyPick = 2;
+
+function applyCopy(i){
+  copyPick = i;
+  const c = COPY[i];
+  const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
+  set('rwHook', c.hook);
+  set('rwBody', c.body);
+  set('rwCta',  c.cta);
+  set('giftT',  BOX_TITLE);
+  document.querySelectorAll('[data-copy]').forEach(b =>
+    b.classList.toggle('on', parseInt(b.dataset.copy, 10) === i));
+}
+
+function buildCopyPicker(host, cls){
+  COPY.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.className = cls;
+    b.dataset.copy = i;
+    b.innerHTML = '<span class="k">' + c.k + '</span><span class="t">' + c.nm + '</span>';
+    b.addEventListener('click', () => { applyCopy(i); if (cls === 'copyopt m') closeNav(); });
+    host.appendChild(b);
+  });
+}
 
 /* ====================== wiring ====================== */
 const phone = document.getElementById('phone');
@@ -662,6 +750,10 @@ function closeNav(){ navsheet.classList.remove('open'); }
 document.getElementById('fab').addEventListener('click', openNav);
 navsheet.addEventListener('click', (e) => { if (e.target.closest('[data-close]')) closeNav(); });
 document.getElementById('navrestart').addEventListener('click', () => { closeNav(); go(0); });
+
+buildCopyPicker(document.getElementById('copypicker'),  'copyopt');
+buildCopyPicker(document.getElementById('copypickerm'), 'copyopt m');
+applyCopy(copyPick);
 
 function clearTimers(){ timers.forEach(clearTimeout); timers = []; }
 function later(fn, ms){ timers.push(setTimeout(fn, ms)); }
